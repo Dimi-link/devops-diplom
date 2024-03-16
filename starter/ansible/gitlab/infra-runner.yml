@@ -1,0 +1,69 @@
+- name: Gitlab Runner
+  hosts: runner
+  tasks:
+    # https://docs.gitlab.com/runner/install/linux-repository.html
+    - name: Gitlab Runner | Infrastructure | Adding Gitlab CE repositories
+      ansible.builtin.shell: |
+        curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | bash
+      tags:
+      - runner
+      - never
+
+    - name: Gitlab Runner | Infrastructure | Install Docker
+      ansible.builtin.package:
+        name: docker.io
+        state: present
+      tags:
+      - runner
+      - never
+
+    - name: Gitlab Runner | Infrastructure | Restart Docker Daemon
+      ansible.builtin.service:
+        name: docker
+        state: restarted
+      tags:
+      - runner
+      - never
+
+    - name: Gitlab Runner | Infrastructure | Install gitlab-runner
+      ansible.builtin.package:
+        name: "{{ gitlab_runner_package_version }}"
+        state: present
+      tags:
+      - runner
+      - never
+
+    - name: Gitlab Runner | Infrastructure | Register gitlab docker runner
+      command: |
+        gitlab-runner register \
+        --non-interactive \
+        --url "{{ url }}" \
+        --registration-token "{{ token }}" \
+        --docker-image alpine:latest \
+        --executor "docker" \
+        --description "docker executor" \
+        --tag-list "infrastructure" \
+        --docker-volumes /var/run/docker.sock:/var/run/docker.sock \
+        --run-untagged="false" \
+        --locked="true"
+      tags:
+      - runner
+      - never
+
+    - name: Gitlab Runner | Infrastructure | Set concurrent
+      ansible.builtin.lineinfile:
+        path: /etc/gitlab-runner/config.toml
+        regexp: '^concurrent'
+        line: concurrent = 10
+      tags:
+      - runner
+      - never
+
+    - name: Gitlab Runner | Infrastructure | Restart daemon
+      ansible.builtin.systemd:
+        state: restarted
+        daemon_reload: yes
+        name: gitlab-runner
+      tags:
+      - runner
+      - never

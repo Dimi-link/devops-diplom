@@ -1,0 +1,37 @@
+---
+- name: Copying Certificates To Local Machine
+  hosts: localhost
+  vars:
+    install_root_cert_pem: "/misc/internal-root-ca.crt"
+  tasks:
+    - name: Create /misc Directory
+      ansible.builtin.file:
+        path: /misc
+        state: directory
+
+    - name: Copy Trusted Root Certificate For Internal Zone
+      copy:
+        dest: "{{ install_root_cert_pem }}"
+        content: "{{ INTERNAL_TRUSTED_ROOT_CERTIFICATE }}"
+
+- name: Waiting Machines SSH
+  hosts: all,!bastion
+  gather_facts: no
+  pre_tasks:
+    - name: Waiting For SSH connection
+      ansible.builtin.wait_for_connection:
+        timeout: 300
+
+- name: Start Misc Tasks
+  hosts: all,!bastion
+  gather_facts: yes
+  vars:
+    install_root_cert_pem: "/misc/internal-root-ca.crt"
+  tasks:         
+    - name: Update all packages to their latest version
+      ansible.builtin.apt:
+        name: "*"
+        update_cache: yes
+
+    - name: Install Trusted Certificate
+      include_tasks: install_root_cert/main.yml

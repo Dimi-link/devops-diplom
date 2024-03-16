@@ -1,0 +1,24 @@
+- name: Bastion Configuration
+  hosts: bastion
+  pre_tasks:
+    - name: Waiting For SSH connection
+      ansible.builtin.wait_for_connection:
+        timeout: 300
+  tasks:
+    - name: Bastion | Update All Packages
+      ansible.builtin.apt:
+        name: "*"
+        update_cache: yes
+
+    - name: Setup alternate SSH port
+      lineinfile:
+          dest: "/etc/ssh/sshd_config"
+          regexp: "^Port"
+          line: "Port {{ SSH_PORT }}"
+      notify: "Restart sshd"
+
+  handlers:
+    - name: Restart sshd
+      service:
+        name: sshd
+        state: restarted

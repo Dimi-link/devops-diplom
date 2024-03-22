@@ -14,7 +14,7 @@ RUN unzip terraform.zip && rm -rf terraform.zip && chmod +x terraform && mv terr
 # install ansible
 RUN apk add --no-cache git python3 py3-pip && \
     pip3 install --no-cache-dir --upgrade pip && \
-    pip3 install --no-cache-dir ansible==6.6.0 && \
+    pip3 install --no-cache-dir ansible==5.10.0 && \
     pip3 install --no-cache-dir jmespath  && \
     pip3 install --no-cache-dir netaddr && \
     pip3 install kubernetes

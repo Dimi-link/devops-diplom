@@ -4,7 +4,7 @@ workflow:
       changes:
       - starter/**/*
 default:
-  image: ${NEXUS_GROUP_REGISTRY}/docker:20.10.16
+  image: ${NEXUS_GROUP_REGISTRY}/docker:24.0.5
   tags:
   - infrastructure
   before_script:

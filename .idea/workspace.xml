@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6116f53c-33a5-4e1f-8ee9-cbec9635e1e7" name="Changes" comment="Upload pipeline starter-image">
+    <list default="true" id="6116f53c-33a5-4e1f-8ee9-cbec9635e1e7" name="Changes" comment="Delete starter template">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,6 +51,7 @@
       <workItem from="1710614708294" duration="256000" />
       <workItem from="1710615049433" duration="627000" />
       <workItem from="1710621020029" duration="646000" />
+      <workItem from="1710752308578" duration="1249000" />
     </task>
     <task id="LOCAL-00001" summary="Upload app">
       <created>1709477659003</created>
@@ -73,7 +74,21 @@
       <option name="project" value="LOCAL" />
       <updated>1710621069872</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Upload infrastructure manifests">
+      <created>1710752400813</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1710752400813</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Delete starter template">
+      <created>1710752965522</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1710752965522</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -107,7 +122,9 @@
     <MESSAGE value="Upload app" />
     <MESSAGE value="Upload starter image" />
     <MESSAGE value="Upload pipeline starter-image" />
-    <option name="LAST_COMMIT_MESSAGE" value="Upload pipeline starter-image" />
+    <MESSAGE value="Upload infrastructure manifests" />
+    <MESSAGE value="Delete starter template" />
+    <option name="LAST_COMMIT_MESSAGE" value="Delete starter template" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

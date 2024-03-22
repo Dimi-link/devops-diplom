@@ -1,3 +1,4 @@
+nexus_version: "3.45.0-01"
 nexus_admin_password: "{{ NEXUS_ADMIN_PASSWORD }}"
 nexus_public_hostname: "{{ hostvars[groups['nexus'][0]]['fqdn'] }}"
 httpd_setup_enable: true
@@ -15,8 +16,8 @@ nexus_privileges:
       - add
       - edit
 nexus_roles:
-  - id: Developpers # maps to the LDAP group
-    name: developers
+  - id: Gitlab # maps to the LDAP group
+    name: gitlab
     description: All developers
     privileges:
       - nx-search-read
@@ -30,9 +31,9 @@ nexus_local_users:
     first_name: Gitlab
     last_name: CI
     email: support@company.com
-    password: "270685"
+    password: "{{ NEXUS_GITLAB_PASSWORD }}"
     roles:
-      - Developers
+      - Gitlab
 nexus_scheduled_tasks:
   - name: compact-blobstore
     cron: '0 0 22 * * ?'

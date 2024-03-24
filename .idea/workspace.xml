@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6116f53c-33a5-4e1f-8ee9-cbec9635e1e7" name="Changes" comment="Delete starter template">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="6116f53c-33a5-4e1f-8ee9-cbec9635e1e7" name="Changes" comment="Multiple minor fixes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,6 +50,7 @@
       <workItem from="1710615049433" duration="627000" />
       <workItem from="1710621020029" duration="646000" />
       <workItem from="1710752308578" duration="1249000" />
+      <workItem from="1711091761099" duration="825000" />
     </task>
     <task id="LOCAL-00001" summary="Upload app">
       <created>1709477659003</created>
@@ -88,7 +87,14 @@
       <option name="project" value="LOCAL" />
       <updated>1710752965522</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Multiple minor fixes">
+      <created>1711091940295</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1711091940295</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,7 +130,8 @@
     <MESSAGE value="Upload pipeline starter-image" />
     <MESSAGE value="Upload infrastructure manifests" />
     <MESSAGE value="Delete starter template" />
-    <option name="LAST_COMMIT_MESSAGE" value="Delete starter template" />
+    <MESSAGE value="Multiple minor fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Multiple minor fixes" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

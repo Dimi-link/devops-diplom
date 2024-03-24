@@ -39,7 +39,7 @@ runner:
   - runner/k8s/certs-secret.yml
 
 network: 
-  name: instances
+  name: infra-net
   subnets:
     prod-a:
       zone: ru-central1-a 
@@ -71,23 +71,23 @@ hosts:
     name: worker-prod21
     cpu: 2
     memory: 4096
-    disk: 40
+    disk: 20
     subnet: prod-a
     public_ip: false
     security_groups: [common,internet,access_to_nexus,k8s_ingress,prod_k8s_cluster]
   worker-prod22:
     name: worker-prod22
-    cpu: 4
-    memory: 8192
-    disk: 40
+    cpu: 2
+    memory: 4096
+    disk: 20
     subnet: prod-b
     public_ip: false
     security_groups: [common,internet,access_to_nexus,k8s_ingress,prod_k8s_cluster]
   master-prod23:
     name: master-prod23
-    cpu: 4
-    memory: 8192
-    disk: 40
+    cpu: 2
+    memory: 4096
+    disk: 20
     subnet: prod-b
     public_ip: false
     security_groups: [common,internet,access_to_nexus,prod_k8s_cluster,k8s_api]

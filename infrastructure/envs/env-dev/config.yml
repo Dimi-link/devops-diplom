@@ -40,7 +40,7 @@ runner:
 
 # network spec
 network: 
-  name: instances
+  name: infra-net
   subnets:
     dev-a:
       zone: ru-central1-a 
@@ -73,7 +73,7 @@ hosts:
     name: worker-dev11
     cpu: 4
     memory: 8192
-    disk: 40
+    disk: 30
     subnet: dev-a
     public_ip: false
     security_groups: [common,internet,access_to_nexus,k8s_ingress,dev_k8s_cluster]
@@ -81,7 +81,7 @@ hosts:
     name: worker-dev12
     cpu: 4
     memory: 8192
-    disk: 40
+    disk: 30
     subnet: dev-b
     public_ip: false
     security_groups: [common,internet,access_to_nexus,k8s_ingress,dev_k8s_cluster]
@@ -89,7 +89,7 @@ hosts:
     name: master-dev13
     cpu: 2
     memory: 2048
-    disk: 40
+    disk: 20
     subnet: dev-b
     public_ip: false
     security_groups: [common,internet,access_to_nexus,dev_k8s_cluster,k8s_api]

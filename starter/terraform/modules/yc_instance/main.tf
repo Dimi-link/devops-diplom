@@ -12,7 +12,6 @@ resource "yandex_compute_instance" "node" {
   name = var.node.name
   hostname = var.node.name
   allow_stopping_for_update = true
-  platform_id = "standard-v2"
   resources {
     cores  = var.node.cpu
     memory = var.node.memory/1024
@@ -28,7 +27,7 @@ resource "yandex_compute_instance" "node" {
     initialize_params {
       image_id = data.yandex_compute_image.os.id
       size = var.node.disk
-	  type = "network-ssd"
+	  type = "network-hdd"
     }
   }
   metadata = {

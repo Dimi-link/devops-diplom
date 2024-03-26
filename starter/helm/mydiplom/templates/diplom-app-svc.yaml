@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: diplom-app
+  labels:
+    name: diplom-app
+spec:
+  type: {{ .Values.diplom-app.service.type }}
+  ports: 
+  - name: main
+    port: 80
+    targetPort: 8080
+{{- if eq .Values.diplom-app.service.type "NodePort" }}
+    nodePort: {{ .Values.diplom-app.service.nodePort }}
+{{- end }}
+  selector:
+    name: diplom-app

@@ -88,7 +88,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(rate(request_duration_seconds_count{service=\"mydiplom\",status_code=~\"2..\",route!=\"metrics\"}[1m])) * 100",
+              "expr": "sum(rate(request_duration_seconds_count{service=\"diplom-app\",status_code=~\"2..\",route!=\"metrics\"}[1m])) * 100",
               "intervalFactor": 2,
               "legendFormat": "2xx",
               "range": true,
@@ -101,7 +101,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(rate(request_duration_seconds_count{service=\"mydiplom\",status_code=~\"4.+|5.+\"}[1m])) * 100",
+              "expr": "sum(rate(request_duration_seconds_count{service=\"diplom-app\",status_code=~\"4.+|5.+\"}[1m])) * 100",
               "intervalFactor": 2,
               "legendFormat": "4xx/5xx",
               "range": true,
@@ -111,7 +111,7 @@ data:
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "mydiplom QPS",
+          "title": "diplom-app QPS",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -194,7 +194,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "histogram_quantile(0.99, sum(rate(request_duration_seconds_bucket{service=\"mydiplom\"}[1m])) by (name, le))",
+              "expr": "histogram_quantile(0.99, sum(rate(request_duration_seconds_bucket{service=\"diplom-app\"}[1m])) by (name, le))",
               "intervalFactor": 2,
               "legendFormat": "99th quantile",
               "range": true,
@@ -207,7 +207,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "histogram_quantile(0.5, sum(rate(request_duration_seconds_bucket{service=\"mydiplom\"}[1m])) by (name, le))",
+              "expr": "histogram_quantile(0.5, sum(rate(request_duration_seconds_bucket{service=\"diplom-app\"}[1m])) by (name, le))",
               "intervalFactor": 2,
               "legendFormat": "50th quantile",
               "range": true,
@@ -220,7 +220,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(rate(request_duration_seconds_sum{service=\"mydiplom\"}[1m])) / sum(rate(request_duration_seconds_count{service=\"mydiplom\"}[1m]))",
+              "expr": "sum(rate(request_duration_seconds_sum{service=\"diplom-app\"}[1m])) / sum(rate(request_duration_seconds_count{service=\"diplom-app\"}[1m]))",
               "intervalFactor": 2,
               "legendFormat": "Mean",
               "range": true,
@@ -230,7 +230,7 @@ data:
           ],
           "thresholds": [],
           "timeRegions": [],
-          "title": "mydiplom latency",
+          "title": "diplom-app latency",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -299,7 +299,7 @@ data:
         ]
       },
       "timezone": "browser",
-      "title": "mydiplom performance",
+      "title": "diplom-app performance",
       "uid": "4KiwR1IVz",
       "version": 1,
       "weekStart": ""

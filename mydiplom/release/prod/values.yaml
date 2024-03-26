@@ -6,6 +6,8 @@ global:
         password: ''
         email: someone@host.com
 
+java:
+    options: -Xms64m -Xmx128m -XX:PermSize=32m -XX:MaxPermSize=64m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
 
 ingress:
     annotations:
@@ -14,10 +16,10 @@ ingress:
     host: mydiplom.dimi.link
     tlsSecretName: ''
 
-mydiplom:
+diplom-app:
     replicas: 1
     image:
-        repo: mydiplom/mydiplom
+        repo: mydiplom/diplom-app
         tag: test
         imagePullSecrets:
         - name: registry-pull-credentials
@@ -29,4 +31,4 @@ mydiplom:
             cpu: 300m
             memory: 300Mi
     service:
-        type: NodePort
+        type: ClusterIP

@@ -97,4 +97,4 @@ deploy_gitlab_vars:
     value: "{{ NEXUS_GITLAB_USERNAME }}"
 
 git_repolist:
-  - { reponame: mydiplom, repopath: https://github.com/Dimi-link/diplom-app.git }
+  - { reponame: diplom-app, repopath: https://github.com/Dimi-link/diplom-app.git }

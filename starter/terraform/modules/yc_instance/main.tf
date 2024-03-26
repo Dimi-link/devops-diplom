@@ -27,7 +27,7 @@ resource "yandex_compute_instance" "node" {
     initialize_params {
       image_id = data.yandex_compute_image.os.id
       size = var.node.disk
-	  type = "network-hdd"
+	  type = "network-ssd"
     }
   }
   metadata = {

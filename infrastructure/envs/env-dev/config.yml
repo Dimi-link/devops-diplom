@@ -73,7 +73,7 @@ hosts:
     name: worker-dev11
     cpu: 4
     memory: 8192
-    disk: 30
+    disk: 20
     subnet: dev-a
     public_ip: false
     security_groups: [common,internet,access_to_nexus,k8s_ingress,dev_k8s_cluster]
@@ -81,7 +81,7 @@ hosts:
     name: worker-dev12
     cpu: 4
     memory: 8192
-    disk: 30
+    disk: 20
     subnet: dev-b
     public_ip: false
     security_groups: [common,internet,access_to_nexus,k8s_ingress,dev_k8s_cluster]

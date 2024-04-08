@@ -1,0 +1,102 @@
+inventory:
+  # ansible inventory structure
+  # every host mentioned in this section must be specified in the params: section
+  all:
+    children:
+      k8s_cluster:
+        children:
+          kube_node:
+            hosts:
+              worker-prod21:  
+              worker-prod22:
+          kube_control_plane:
+            hosts:
+              master-prod23:
+          etcd:
+            hosts:
+              master-prod23: 
+
+# monitoring spec
+monitoring:
+  enabled: true
+  version: 41.7.2
+  name: prometheus
+  namespace: monitoring
+  helm_values: 
+    - monitoring/values.yml
+  k8s_manifests:
+  - monitoring/k8s/dashboard-performance.yml
+  - monitoring/k8s/dashboard-resources.yml
+
+runner:
+  enabled: true
+  name: prod-runner
+  namespace: prod-runner
+  helm_values: 
+    - runner/values.yml
+  k8s_manifests:
+  - runner/k8s/rolebinding.yml
+  - runner/k8s/certs-secret.yml
+
+network: 
+  name: infra-net
+  subnets:
+    prod-a:
+      zone: ru-central1-a 
+      subnets: [192.168.48.0/28]
+    prod-b:
+      zone: ru-central1-b 
+      subnets: [192.168.64.0/28]
+  security_groups:
+    prod_k8s_cluster:
+      ingress:
+        - protocol: tcp
+          ports: 1-65535
+          cidr: [192.168.48.0/28, 192.168.64.0/28]
+        - protocol: udp
+          ports: 1-65535
+          cidr: [192.168.48.0/28, 192.168.64.0/28]
+      egress:
+        - protocol: tcp
+          ports: 1-65535
+          cidr: [192.168.48.0/28, 192.168.64.0/28]
+        - protocol: udp
+          ports: 1-65535
+          cidr: [192.168.48.0/28, 192.168.64.0/28]
+
+# hosts specification
+# every host must have defined name, cpu, memory, disk, public_ip
+hosts:
+  worker-prod21:
+    name: worker-prod21
+    cpu: 2
+    memory: 4096
+    disk: 20
+    subnet: prod-a
+    public_ip: false
+    security_groups: [common,internet,access_to_nexus,k8s_ingress,prod_k8s_cluster]
+  worker-prod22:
+    name: worker-prod22
+    cpu: 2
+    memory: 4096
+    disk: 20
+    subnet: prod-b
+    public_ip: false
+    security_groups: [common,internet,access_to_nexus,k8s_ingress,prod_k8s_cluster]
+  master-prod23:
+    name: master-prod23
+    cpu: 2
+    memory: 4096
+    disk: 20
+    subnet: prod-b
+    public_ip: false
+    security_groups: [common,internet,access_to_nexus,prod_k8s_cluster,k8s_api]
+
+
+balancer:
+  target_port: 80
+  ext_port: 9999
+  tls: false
+  nodes:
+  - worker-prod21
+  - worker-prod22

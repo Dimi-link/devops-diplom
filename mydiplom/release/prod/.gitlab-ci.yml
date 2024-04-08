@@ -1,0 +1,25 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+image:
+  name: "$NEXUS_GROUP_REGISTRY/infrastructure/starter:latest"
+  entrypoint: [""]
+
+default:
+  before_script:
+    - source /app/scripts/lib.sh
+    - export KUBECONFIG=$KUBECONFIG
+    - mkdir ~/.kube/
+    - echo $KUBECONFIGFILE > config
+    - mv config ~/.kube/
+    - chmod 600 ~/.kube/config
+
+stages:
+  - deploy
+
+deploy:
+  stage:
+    deploy
+  tags: [env-prod]  
+  script:
+  - ansible-playbook --extra-vars "NEXUS_GROUP_REGISTRY=${NEXUS_GROUP_REGISTRY}" --extra-vars "NEXUS_GITLAB_USERNAME=${NEXUS_GITLAB_USERNAME}" --extra-vars "NEXUS_GITLAB_PASSWORD=${NEXUS_GITLAB_PASSWORD}" --extra-vars "ansible_ssh_common_args='${ANSIBLE_SSH_COMMON_ARGS}'" /app/ansible/deploy/main.yml -i hosts.yaml

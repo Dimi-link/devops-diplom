@@ -1,0 +1,72 @@
+include:
+  - local: gitlab-ci/jobs.yml
+
+default:
+  before_script:
+    - | 
+      export ENV=${CI_ENVIRONMENT_NAME}
+      export TF_VAR_ENV=${ENV}
+      export TF_VAR_config="${CI_PROJECT_DIR}/envs/${ENV}/config.yml"
+      export TF_VAR_ansible_inventory="${CI_PROJECT_DIR}/envs/${ENV}/inventory.yml"
+      export ENV_PATH=${CI_PROJECT_DIR}/envs/${ENV}
+      export YC_STORAGE_ACCESS_KEY=${ACCESS_KEY}
+      export YC_STORAGE_SECRET_KEY=${SECRET_KEY}
+      export AWS_ACCESS_KEY_ID=${ACCESS_KEY}
+      export AWS_SECRET_ACCESS_KEY=${SECRET_KEY}
+    - echo ${API_KEY} | base64 -d>/app/key.json
+    - export YC_SERVICE_ACCOUNT_KEY_FILE=/app/key.json
+    - if [ -f "${KUBECONFIG}" ]; then chmod 400 ${KUBECONFIG}; fi;
+    - eval `ssh-agent -s`
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$SSH_PUBLIC_KEY"> ~/yc_key.pub
+    - echo "$ANSIBLE_VAULT_PASSWORD">.vault
+    - source /app/scripts/lib.sh
+  tags:
+  - infrastructure
+
+stages:
+  - plan
+  - apply
+  - prepare
+  - k8s
+  - runner
+  - monitoring
+  - other
+
+plan:
+  extends: .terraform:plan
+  script:
+    - terraform_plan
+
+apply:
+  extends: .terraform:apply
+  script:
+    - terraform_apply
+  artifacts:
+    paths: 
+      - ${CI_PROJECT_DIR}/envs/${CI_ENVIRONMENT_NAME}/inventory.yml
+
+prepare:
+  extends: .ansible:prepare
+  script:
+    - provision_misc
+
+provision.k8s:
+  extends: .ansible:k8s
+  script:
+    - provision_k8s
+  artifacts:
+    paths: 
+      - ${CI_PROJECT_DIR}/envs/${CI_ENVIRONMENT_NAME}/artifacts/
+
+provision.runner:
+  extends: .ansible:runner
+  script:
+    - export K8S_AUTH_KUBECONFIG=${CI_PROJECT_DIR}/envs/${CI_ENVIRONMENT_NAME}/artifacts/admin.conf
+    - provision_k8s_runner
+
+provision.monitoring:
+  extends: .ansible:monitoring
+  script:
+    - export K8S_AUTH_KUBECONFIG=${CI_PROJECT_DIR}/envs/${CI_ENVIRONMENT_NAME}/artifacts/admin.conf
+    - provision_monitoring

@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: diplomapp
+  labels:
+    name: diplomapp
+spec:
+  type: {{ .Values.diplomapp.service.type }}
+  ports: 
+  - name: nginx
+    port: 80
+  type: ClusterIP  
+  selector:
+    name: diplomapp
+

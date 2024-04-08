@@ -1,0 +1,27 @@
+"all":
+  "children":
+    "bastion":
+      "hosts":
+        "bastion11":
+          "ansible_host": "158.160.126.56"
+          "fqdn": "bastion11.ru-central1.internal"
+    "gitlab":
+      "hosts":
+        "gitlab11":
+          "ansible_host": "192.168.0.12"
+          "fqdn": "gitlab11.ru-central1.internal"
+    "k8s_cluster":
+      "children": {}
+    "nexus":
+      "hosts":
+        "nexus11":
+          "ansible_host": "192.168.0.8"
+          "fqdn": "nexus11.ru-central1.internal"
+    "runner":
+      "hosts":
+        "gitlab11":
+          "ansible_host": "192.168.0.12"
+          "fqdn": "gitlab11.ru-central1.internal"
+  "hosts": {}
+  "vars":
+    "ansible_user": "ubuntu"

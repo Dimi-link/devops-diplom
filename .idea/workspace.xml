@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6116f53c-33a5-4e1f-8ee9-cbec9635e1e7" name="Changes" comment="Init" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="GOROOT" url="file://$PROJECT_DIR$/../../../Program Files/Go" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2dBN0na0McSJ9nOF46IY5kmQ1TS" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.format.on.save.advertiser.fired": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "go.import.settings.migrated": "true",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6116f53c-33a5-4e1f-8ee9-cbec9635e1e7" name="Changes" comment="" />
+      <created>1709477293060</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1709477293060</updated>
+      <workItem from="1709477294318" duration="961000" />
+      <workItem from="1710614708294" duration="256000" />
+      <workItem from="1710615049433" duration="627000" />
+      <workItem from="1710621020029" duration="646000" />
+      <workItem from="1710752308578" duration="1249000" />
+      <workItem from="1711091761099" duration="825000" />
+      <workItem from="1711279753964" duration="883000" />
+      <workItem from="1711390588343" duration="1205000" />
+      <workItem from="1711442655180" duration="2886000" />
+      <workItem from="1711473585314" duration="719000" />
+      <workItem from="1711819581665" duration="777000" />
+      <workItem from="1711993700676" duration="15014000" />
+      <workItem from="1712604985319" duration="394000" />
+    </task>
+    <task id="LOCAL-00001" summary="Upload app">
+      <created>1709477659003</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1709477659003</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Upload starter image">
+      <created>1710614796008</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1710614796008</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Upload pipeline starter-image">
+      <created>1710621069872</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1710621069872</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Upload infrastructure manifests">
+      <created>1710752400813</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1710752400813</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Delete starter template">
+      <created>1710752965522</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1710752965522</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Multiple minor fixes">
+      <created>1711091940295</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1711091940295</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Multiple minor fixes">
+      <created>1711279803770</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1711279803770</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Upload mydiplom ci-components">
+      <created>1711303126477</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1711303126477</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Upload mydiplom ci-components">
+      <created>1711390604100</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1711390604100</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Multiple minor fixes">
+      <created>1711442783995</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1711442783995</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Diplom-app helm fixes">
+      <created>1711446293544</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1711446293544</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Monitoring fixes">
+      <created>1711447029392</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1711447029392</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Minor fixes">
+      <created>1711447372914</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1711447372914</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Minor fixes">
+      <created>1711473592778</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1711473592778</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Multiple fixes">
+      <created>1711819606216</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1711819606216</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Multiple fixes">
+      <created>1712008404023</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1712008404023</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Upload app" />
+    <MESSAGE value="Upload starter image" />
+    <MESSAGE value="Upload pipeline starter-image" />
+    <MESSAGE value="Upload infrastructure manifests" />
+    <MESSAGE value="Delete starter template" />
+    <MESSAGE value="Upload mydiplom ci-components" />
+    <MESSAGE value="Multiple minor fixes" />
+    <MESSAGE value="Diplom-app helm fixes" />
+    <MESSAGE value="Monitoring fixes" />
+    <MESSAGE value="Minor fixes" />
+    <MESSAGE value="Multiple fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Multiple fixes" />
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+</project>

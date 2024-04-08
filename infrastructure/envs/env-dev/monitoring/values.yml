@@ -1,0 +1,8 @@
+alertmanager:
+  enabled: false
+grafana:
+  enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: ''
+    hosts: [mon.dev.dimi.link]

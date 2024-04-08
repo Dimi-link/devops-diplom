@@ -1,0 +1,153 @@
+---
+- name: Gitlab Provisioning
+  hosts: gitlab
+  tasks:
+
+    - name: Install Gitlab CE | Installing prerequisites
+      include_tasks: prerequisites.yml
+      loop:
+        - curl
+        - git
+        - ca-certificates
+        - openssh-server
+        - postfix
+        - python3-pip
+
+    # https://gist.github.com/cjtallman/b526d8c7d8b910ba4fd41eb51cd5405b
+    - name: Install Gitlab CE | Adding Gitlab CE repositories
+      ansible.builtin.shell: |
+        curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
+
+    - name: Install Gitlab CE | Install python-gitlab module
+      ansible.builtin.pip:
+        name: python-gitlab
+
+    - name: Install Gitlab CE | Install Package
+      ansible.builtin.package:
+        name: "{{ gitlab_package_version }}"
+        state: present
+      register: packagekey
+      
+    - name: Install Gitlab CE | Create the directory /etc/gitlab/ssl/
+      ansible.builtin.file:
+        path: /etc/gitlab/ssl/
+        state: directory
+        mode: '0755'
+
+    - name: Install Gitlab CE | Copy Trusted Certificate For Internal Zone
+      copy:
+        dest: "/etc/gitlab/ssl/{{ gitlab_host }}.crt"
+        content: "{{ INTERNAL_TRUSTED_CERTIFICATE }}"
+
+    - name: Install Gitlab CE | Copy Trusted Certificate Key For Internal Zone
+      copy:
+        dest: "/etc/gitlab/ssl/{{ gitlab_host }}.key"
+        content: "{{ INTERNAL_TRUSTED_CERTIFICATE_KEY }}"          
+
+    - name: Install Gitlab CE | Set Gitlab External URL
+      ansible.builtin.lineinfile:
+        path: /etc/gitlab/gitlab.rb
+        regexp: ^external_url 'http://gitlab.example.com'
+        line: external_url '{{ gitlab_url }}'
+      register: external_url
+
+    - name: Install Gitlab CE | Configuring HTTPS Redirect
+      ansible.builtin.lineinfile:
+        path: /etc/gitlab/gitlab.rb
+        line: "{{ item }}"
+      loop:
+        - nginx['redirect_http_to_https'] = true
+
+    - name: Install Gitlab CE | Memory Tuning
+      ansible.builtin.lineinfile:
+        path: /etc/gitlab/gitlab.rb
+        line: "{{ item }}"
+      loop:
+        - "puma['worker_processes'] = 0"
+        - "sidekiq['max_concurrency'] = 10"
+        - "prometheus_monitoring['enable'] = false"
+        - "gitlab_rails['env'] = {'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000'}"
+        - "gitaly['cgroups_repositories_count'] = 2"
+        - "gitaly['cgroups_mountpoint'] = '/sys/fs/cgroup'"
+        - "gitaly['cgroups_hierarchy_root'] = 'gitaly'"
+        - "gitaly['cgroups_memory_enabled'] = true"
+        - "gitaly['cgroups_memory_limit'] = 500000"
+        - "gitaly['cgroups_cpu_enabled'] = true"
+        - "gitaly['cgroups_cpu_shares'] = 512"
+        - "gitaly['concurrency'] = [{'rpc' => '/gitaly.SmartHTTPService/PostReceivePack','max_per_repo' => 3}, {'rpc' => '/gitaly.SSHService/SSHUploadPack','max_per_repo' => 3}]"
+        - "gitaly['env'] = {'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so', 'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000', 'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'}"      
+
+    - name: Install Gitlab CE | Restart Gitlab CE
+      ansible.builtin.shell: gitlab-ctl reconfigure && sleep 30
+      when: packagekey.changed or external_url.changed
+
+    - name: Initial Configuration | Get Gitlab password
+      register: initial_gitlab_password
+      ansible.builtin.shell: |
+        grep -oP '(?<=Password: ).*' /etc/gitlab/initial_root_password
+
+    - name: Initial Configuration | Create GitLab User
+      community.general.gitlab_user:
+        api_url: "{{ gitlab_url }}"
+        validate_certs: False
+        api_username: "{{ gitlab_user }}"
+        api_password: "{{ initial_gitlab_password.stdout }}"
+        name: "{{ gitlab_user }}"
+        username: "{{ gitlab_user }}"
+        password: "{{ gitlab_password }}"
+        email: "{{ gitlab_email }}"
+        state: present
+      ignore_errors: yes # assuming that the user has been updated already
+
+    - name: Initial Configuration | Configure git client
+      ansible.builtin.shell: |
+        git config --global user.email "admin@example.com"
+        git config --global user.name "root"
+
+    - name: Gitlab Group | Infrastructure
+      include_tasks: infra-projects.yml
+      tags:
+      - never
+      - infrastructure
+      - runner
+
+    - name: Gitlab Group | Apps | Injects
+      include_tasks: apps-projects.yml
+      tags:
+      - never
+      - apps
+
+    - name: Gitlab Group | mydiplom Deployment
+      include_tasks: deployment-projects.yml
+      tags:
+      - never
+      - apps
+
+    - name: Initial Gitlab Password
+      ansible.builtin.debug:
+        msg: |
+          Gitlab uri:      "{{ gitlab_url }}"
+          Gitlab user:     "{{ gitlab_user }}"
+          Gitlab password: "{{ gitlab_password }}"
+      tags:
+      - output
+      - never
+
+    - name: Gitlab Group | mydiplom | Caching mydiplom project
+      ansible.builtin.copy:
+        src: /mydiplom
+        dest: /
+        mode: '0644'
+
+- name: Infra Gitlab Runner | Install
+  ansible.builtin.import_playbook: infra-runner.yml
+  vars:
+    url: "{{ gitlab_url }}"
+    token: "{{ gitlab_infrastructure_group.group.runners_token }}"
+
+# - name: mydiplom Gitlab Runner | Install
+#   ansible.builtin.import_playbook: apps-runner.yml
+#   vars:
+#     url: "{{ gitlab_url }}"
+#     token: "{{ gitlab_apps_group.group.runners_token }}"
+#     env: "{{ lookup('env','ENV') }}"

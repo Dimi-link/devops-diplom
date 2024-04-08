@@ -1,0 +1,12 @@
+---
+- name: Check that the root certificate exists
+  become: no
+  local_action: "stat path={{ install_root_cert_pem }}"
+  register: result
+  failed_when: not result.stat.exists
+
+- include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+
+- include_tasks: red_hat.yml
+  when: ansible_os_family == "RedHat"

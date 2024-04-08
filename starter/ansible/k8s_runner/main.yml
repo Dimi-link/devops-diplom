@@ -1,0 +1,54 @@
+- name: Gitlab Runner
+  hosts: localhost
+  tasks:
+    - name: Read config file
+      ansible.builtin.include_vars:
+        file: "{{ lookup('env','TF_VAR_config') }}"
+        name: config
+
+    - name: Gitlab Runner Installation
+      block:
+      
+        - name: Add stable chart repo
+          kubernetes.core.helm_repository:
+            name: gitlab
+            repo_url: https://charts.gitlab.io
+
+        - name: Check helm_values paths
+          stat:
+            path: "{{ lookup('env','ENV_PATH') }}//{{ item }}"
+          register: stat_results
+          with_items: "{{ config.runner.helm_values }}"
+          ignore_errors: True
+          when: config.runner.helm_values is defined
+
+        - name: Install kubernetes gitlab-runner
+          kubernetes.core.helm:
+            name: "{{ config.runner.name }}"
+            chart_ref: gitlab/gitlab-runner
+            chart_version: "{{ config.runner.version | default(omit) }}"
+            release_namespace: "{{ config.runner.namespace | default('gitlab-runner') }}"
+            create_namespace: yes
+            values_files: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
+            values:
+              runnerRegistrationToken: "{{ lookup('env','RUNNER_TOKEN') }}"
+              gitlabUrl: "https://{{ lookup('env','CI_SERVER_HOST') }}/"
+              runners:
+                tags: "{{ lookup('env','ENV') }}"
+
+        - name: Check k8s_manifests paths
+          stat:
+            path: "{{ lookup('env','ENV_PATH') }}//{{ item }}"
+          register: stat_results
+          with_items: "{{ config.runner.k8s_manifests }}"
+          ignore_errors: True
+          when: config.runner.k8s_manifests is defined
+
+        - name: Apply k8s manifests
+          kubernetes.core.k8s:
+            namespace: "{{ config.runner.namespace | default('default') }}"
+            state: present
+            src: "{{ item }}"
+          with_items: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}"
+          when: config.runner.k8s_manifests is defined and config.runner.enabled is defined and config.runner.enabled | bool
+      when: config.runner.enabled is defined and config.runner.enabled | bool

@@ -1,0 +1,56 @@
+---
+- name: Monitoring Configuration
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Read config file
+      ansible.builtin.include_vars:
+        file: "{{ lookup('env','TF_VAR_config') }}"
+        name: config
+
+    - name: Monitoring Installation
+      block:
+
+        - name: Add stable chart repo
+          kubernetes.core.helm_repository:
+            name: prometheus-community
+            repo_url: https://prometheus-community.github.io/helm-charts
+
+        - name: Check helm_values paths
+          stat:
+            path: "{{ lookup('env','ENV_PATH') }}/{{ item }}"
+          register: stat_results
+          with_items: "{{ config.monitoring.helm_values }}"
+          ignore_errors: True
+          when: config.monitoring.helm_values is defined
+
+        - name: Print existing helm_values files
+          ansible.builtin.debug:
+            msg: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
+
+        - name: Install prometheus-operator
+          kubernetes.core.helm:
+            name: "{{ config.monitoring.name }}"
+            chart_ref: prometheus-community/kube-prometheus-stack 
+            chart_version: "{{ config.monitoring.version | default(omit) }}"
+            release_namespace: "{{ config.monitoring.namespace | default('default') }}"
+            create_namespace: yes
+            values_files: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}" 
+            values:
+              grafana.adminPassword: "{{ lookup('ansible.builtin.password', '/dev/null length=15 chars=ascii_letters') }}"
+
+        - name: Check k8s_manifests paths
+          stat:
+            path: "{{ lookup('env','ENV_PATH') }}//{{ item }}"
+          register: stat_results
+          with_items: "{{ config.monitoring.k8s_manifests }}"
+          ignore_errors: True
+          when: config.monitoring.k8s_manifests is defined
+
+        - name: Apply k8s manifests
+          kubernetes.core.k8s:
+            namespace: "{{ config.monitoring.namespace | default('default') }}"
+            state: present
+            src: "{{ item }}"
+          with_items: "{{ stat_results.results | selectattr('stat.exists', 'true') | map(attribute='stat.path') | list }}"
+      when: config.monitoring.enabled is defined and config.monitoring.enabled | bool

@@ -1,0 +1,7 @@
+roles:
+- name: geerlingguy.apache
+- name: ansible-thoteam.nexus3-oss
+
+collections:
+  - name: kubernetes.core
+    version: 2.3.1

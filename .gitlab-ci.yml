@@ -1,0 +1,21 @@
+workflow:
+  rules:
+    - if: $CI_DEFAULT_BRANCH == $CI_COMMIT_BRANCH
+      changes:
+      - starter/**/*
+default:
+  image: ${NEXUS_GROUP_REGISTRY}/docker:24.0.5
+  tags:
+  - infrastructure
+  before_script:
+    - mkdir -p ${HOME}/.docker && echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - docker build ./starter/ -t ${NEXUS_RELEASE_REGISTRY}/infrastructure/starter:latest -t ${NEXUS_RELEASE_REGISTRY}/infrastructure/starter:${CI_PIPELINE_IID}
+    - docker push ${NEXUS_RELEASE_REGISTRY}/infrastructure/starter:${CI_PIPELINE_IID}
+    - docker push ${NEXUS_RELEASE_REGISTRY}/infrastructure/starter:latest || true

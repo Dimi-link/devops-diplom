@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diplomapp
+spec:
+  replicas: {{ .Values.diplomapp.replicas }}
+  selector:
+    matchLabels:
+      name: diplomapp
+  template:
+    metadata:
+      labels:
+        name: diplomapp
+      {{- if .Values.istio.enabled }}
+      annotations:
+        sidecar.istio.io/rewriteAppHTTPProbers: "true"
+      {{- end }}
+    spec:
+      containers:
+      - name: diplomapp
+        image: {{if .Values.global.registry}}{{ .Values.global.registry }}/{{end}}{{ .Values.diplomapp.image.repo }}:{{ .Values.diplomapp.image.tag }}
+        resources:
+{{ toYaml .Values.diplomapp.resources | indent 10 }}
+        ports:
+        - containerPort: 80
+    {{- with .Values.diplomapp.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+

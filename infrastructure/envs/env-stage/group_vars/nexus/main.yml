@@ -1,0 +1,95 @@
+nexus_version: "3.45.0-01"
+nexus_admin_password: "{{ NEXUS_ADMIN_PASSWORD }}"
+nexus_public_hostname: "{{ hostvars[groups['nexus'][0]]['fqdn'] }}"
+httpd_setup_enable: true
+nexus_privileges:
+  - name: all-repos-read
+    description: 'Read & Browse access to all repos'
+    repository: '*'
+    actions:
+      - read
+      - browse
+  - name: company-project-deploy
+    description: 'Deployments to company-project'
+    repository: company-project
+    actions:
+      - add
+      - edit
+nexus_roles:
+  - id: Gitlab # maps to the LDAP group
+    name: gitlab
+    description: All developers
+    privileges:
+      - nx-search-read
+      - all-repos-read
+      - company-project-deploy
+      - nx-repository-admin-*-*-edit
+      - nx-repository-view-*-*-*
+    roles: []
+nexus_local_users:
+  - username: gitlab # used as key to update
+    first_name: Gitlab
+    last_name: CI
+    email: support@company.com
+    password: "{{ NEXUS_GITLAB_PASSWORD }}"
+    roles:
+      - Gitlab
+nexus_scheduled_tasks:
+  - name: compact-blobstore
+    cron: '0 0 22 * * ?'
+    typeId: blobstore.compact
+    taskProperties:
+      blobstoreName: 'company-artifacts'
+nexus_config_docker: true
+
+nexus_repos_docker_hosted:
+  - name: docker-release
+    http_port: 9079
+    proxy_port: 9179
+    v1_enabled: True
+  - name: docker-snapshots
+    http_port: 9080
+    proxy_port: 9180
+    v1_enabled: True
+    cleanup_policies:
+    - docker_snapshots_cleanup
+
+nexus_repos_docker_proxy:
+  - name: docker-proxy
+    http_port: "{{ nexus_docker_proxy_port }}"
+    v1_enabled: True
+    index_type: "HUB"
+    remote_url: "https://registry-1.docker.io"
+    use_nexus_certificates_to_access_index: false
+  - name: gcr-proxy
+    http_port: 9083
+    v1_enabled: True
+    index_type: "REGISTRY"
+    remote_url: "https://gcr.io/"
+    use_nexus_certificates_to_access_index: false
+  - name: quay-proxy
+    http_port: 9084
+    v1_enabled: True
+    index_type: "REGISTRY"
+    remote_url: "https://quay.io/"
+    use_nexus_certificates_to_access_index: false
+
+nexus_repos_docker_group:
+  - name: docker-group
+    http_port: "{{ nexus_docker_group_port }}"
+    proxy_port: 9182
+    v1_enabled: True
+    member_repos:
+      - docker-release
+      - docker-snapshots
+      - docker-proxy
+      - gcr-proxy
+      - quay-proxy
+
+nexus_repos_cleanup_policies:
+  - name: docker_snapshots_cleanup
+    format: docker
+    mode:
+    notes: "Cleaning Snapshots Repository"
+    criteria:
+      lastBlobUpdated: 2  # Optional

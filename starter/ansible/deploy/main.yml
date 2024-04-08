@@ -1,0 +1,32 @@
+- name: mydiplom Deployment
+  hosts: localhost
+  tasks:
+    - name: mydiplom Deployment
+      block:
+      
+        # - name: Add stable chart rep
+        #   kubernetes.core.helm_repository:
+        #     name: gitlab
+        #     repo_url: https://charts.gitlab.io
+
+        - name: Create Namespace For mydiplom Deployment
+          kubernetes.core.k8s:
+            name: diplomapp
+            api_version: v1
+            kind: Namespace
+            state: present
+
+        - name: Push Deployment
+          kubernetes.core.helm:
+            name: "{{ DEPLOYMENT_NAME | default('diplomapp') }}"
+            chart_ref: /app/helm/mydiplom
+            release_namespace: diplomapp
+            values_files: 
+              - "{{ lookup('env','CI_PROJECT_DIR') }}/values.yaml"
+            values:
+              global:
+                imageCredentials:
+                    registry: "{{ NEXUS_GROUP_REGISTRY }}"
+                    username: "{{ NEXUS_GITLAB_USERNAME }}"
+                    password: "{{ NEXUS_GITLAB_PASSWORD }}"
+

@@ -1,0 +1,62 @@
+---
+- name: Gitlab Group | mydiplom Deployment | Create
+  # https://github.com/ansible-collections/community.general/issues/4990#issuecomment-1193366106
+  community.general.gitlab_group:
+    api_url: "{{ gitlab_url }}"
+    validate_certs: False
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    name: release
+    visibility: internal
+    description: ''
+    project_creation_level: maintainer
+    require_two_factor_authentication: no
+    subgroup_creation_level: maintainer
+    auto_devops_enabled: no
+    state: present
+  register: gitlab_group
+  tags:
+    - apps
+
+- name: Gitlab Group | mydiplom Deployment | Set CI/CD variables
+  community.general.gitlab_group_variable:
+    api_url: "{{ gitlab_url }}"
+    validate_certs: False
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    group: release
+    purge: true
+    variables: "{{ deploy_gitlab_vars }}"
+  tags:
+  - apps
+
+- name: Gitlab Group | mydiplom Deployment | Create Prod Repository
+  community.general.gitlab_project:
+    api_url: "{{ gitlab_url }}"
+    api_username: "{{ gitlab_user }}"
+    api_password: "{{ gitlab_password }}"
+    name: release-prod
+    visibility: internal
+    group: "{{ gitlab_group.group.id }}"
+  register: project
+  tags:
+    - apps
+
+- name: Gitlab Group | mydiplom Deployment | Push Content
+  ansible.builtin.shell: |
+    repopath={{ source_repo }}
+    reponame={{ source_repo_name }}
+    rm -rf $reponame
+    git clone $repopath $reponame
+    cp -r $reponame/mydiplom/release/prod .
+    cd prod
+    git init
+    git add .
+    git commit -m "[skip ci] init commit"
+    git remote add gitlab-origin https://{{ gitlab_user }}:{{ gitlab_password }}@{{ gitlab_host }}/{{ gitlab_group.group.name }}/release-prod.git
+    git push -o ci.skip --all gitlab-origin
+    git push -o ci.skip --tags gitlab-origin
+    cd .. && rm -rf prod
+  when: project.changed
+  tags:
+    - apps
